@@ -16,6 +16,9 @@ public class LogController {
     @Autowired
     private LogService logService;
 
+
+    //CRUD
+
     @GetMapping("")
     public List<Log> getAllLogs(){
         return logService.getAllLogs();
@@ -32,8 +35,9 @@ public class LogController {
     }
 
     @PostMapping("/addlog")
-    public void addLog(@RequestBody Log log){
+    public String addLog(@RequestBody Log log){
         logService.addlog(log);
+        return "Registro agregado correctamente";
     }
 
     //TODO: ver de agregar confirmación antes de borrar.
@@ -57,6 +61,35 @@ public class LogController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ID a modificar no encontrado");
         }
     }
+
+    // METODOS DE LA LOGICA DEL NEGOCIO
+
+    //Total por mes
+        //Recibo por url el N° del mes (1 a 12) y hago su validacion
+    @GetMapping("/totalMes/{month}")
+    public ResponseEntity<?> getLogsPerMonth(@PathVariable int month) {
+        if (month < 1 || month > 12) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Mes inválido. Debe estar entre 1 y 12.");
+        }
+        double total = logService.getLogsPerMonth(month);
+        return ResponseEntity.ok(total);
+    }
+
+
+
+    // Total por categoria por mes
+
+
+    // Total por medio de pago
+
+
+    // Total desde-hasta por categoria
+
+
+    // Total desde-hasta por medio de pago
+
+
+
 
     //todo: logica del negocio: calculos de totales por rubro por mes; calculo totales desde-hasta. En el servicio(?)
 

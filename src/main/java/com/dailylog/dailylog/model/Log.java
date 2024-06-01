@@ -23,5 +23,9 @@ public class Log {
     @Enumerated(EnumType.STRING)
     @Column(name = "Categoria")
     private Category category;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "FormaDePago")
+    private PaymentMethod paymentMethod;
 }
 
