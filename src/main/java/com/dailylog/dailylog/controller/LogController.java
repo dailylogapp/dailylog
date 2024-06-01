@@ -1,6 +1,7 @@
 package com.dailylog.dailylog.controller;
 
 import com.dailylog.dailylog.exceptions.LogNotFoundException;
+import com.dailylog.dailylog.model.Category;
 import com.dailylog.dailylog.model.Log;
 import com.dailylog.dailylog.service.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,9 +76,17 @@ public class LogController {
         return ResponseEntity.ok(total);
     }
 
-
-
     // Total por categoria por mes
+        //Recibo por url el N° del mes y la categoria y hago sus validaciones
+    @GetMapping("/totalMesCategoria/{month}/{category}")
+    public ResponseEntity<?> getLogsPerMonthPerCategory(@PathVariable int month, @PathVariable Category category) {
+        if (month < 1 || month > 12) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Mes inválido. Debe estar entre 1 y 12.");
+        }
+
+        double total = logService.getLogsPerMonthPerCategory(month, category);
+        return ResponseEntity.ok(total);
+    }
 
 
     // Total por medio de pago

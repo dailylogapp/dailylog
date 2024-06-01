@@ -1,6 +1,7 @@
 package com.dailylog.dailylog.service;
 
 import com.dailylog.dailylog.exceptions.LogNotFoundException;
+import com.dailylog.dailylog.model.Category;
 import com.dailylog.dailylog.model.Log;
 import com.dailylog.dailylog.repository.LogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +60,14 @@ public class LogService {
         return allLogs.stream()
                 .filter(log -> log.getDate().getMonthValue() == month)
                 .mapToDouble(Log::getPrice) //Mapea cada log filtrado al valor de su precio
+                .sum();
+    }
+
+    public double getLogsPerMonthPerCategory(int month, Category category) {
+        List<Log> allLogs = logRepository.findAll();
+        return allLogs.stream()
+                .filter(log -> log.getCategory() == category && log.getDate().getMonthValue() == month)
+                .mapToDouble(Log::getPrice)
                 .sum();
     }
 }
