@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class LogService {
@@ -32,14 +31,20 @@ public class LogService {
     }
 
     public void deleteLog(Long id) {
-        //Busco el id
-        Optional<Log> idToDelete = logRepository.findById(id);
-
-        //Si existe, borrarlo, sino mensaje "no existe id"
-        if (idToDelete.isPresent()) {
+        if (logRepository.existsById(id)) {
             logRepository.deleteById(id);
         } else {
             throw new LogNotFoundException("El id " + id + " no fue encontrado");
+        }
+    }
+
+    public void updateLog(Log log, Long id) {
+        if (logRepository.existsById(id)) {
+            Log existingLog = logRepository.findById(id).orElseThrow(() -> new LogNotFoundException("ID a modificar no encontrado"));
+            log.setId(existingLog.getId()); // Set the correct ID before saving
+            logRepository.save(log);
+        } else {
+            throw new LogNotFoundException("ID a modificar no encontrado");
         }
     }
 }
