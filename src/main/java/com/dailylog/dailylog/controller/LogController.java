@@ -3,6 +3,7 @@ package com.dailylog.dailylog.controller;
 import com.dailylog.dailylog.exceptions.LogNotFoundException;
 import com.dailylog.dailylog.model.Category;
 import com.dailylog.dailylog.model.Log;
+import com.dailylog.dailylog.model.PaymentMethod;
 import com.dailylog.dailylog.service.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -77,7 +78,7 @@ public class LogController {
     }
 
     // Total por categoria por mes
-        //Recibo por url el N° del mes y la categoria y hago sus validaciones
+        //Recibo por url el N° del mes y la categoria del enum y hago validacion del mes
     @GetMapping("/totalMesCategoria/{month}/{category}")
     public ResponseEntity<?> getLogsPerMonthPerCategory(@PathVariable int month, @PathVariable Category category) {
         if (month < 1 || month > 12) {
@@ -88,8 +89,27 @@ public class LogController {
         return ResponseEntity.ok(total);
     }
 
-
     // Total por medio de pago
+        //Recibo por url el medio de pago del enum
+    @GetMapping("/totalFormaDePago/{paymentMethod}")
+    public ResponseEntity<?> getLogsPerPaymentMethod(@PathVariable PaymentMethod paymentMethod) {
+        double total = logService.getLogsPerPaymentMethod(paymentMethod);
+        return ResponseEntity.ok(total);
+    }
+
+    // Total por medio de pago y mes
+    //Recibo por url el N° del mes y el medio de pago del enum y hago validacion del mes
+    @GetMapping("/totalMesFormaDePago/{month}/{paymentMethod}")
+    public ResponseEntity<?> getLogsPerMonthPerPaymentMethod(@PathVariable int month, @PathVariable PaymentMethod paymentMethod) {
+        if (month < 1 || month > 12) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Mes inválido. Debe estar entre 1 y 12.");
+        }
+
+        double total = logService.getLogsPerMonthPerPaymentMethod(month, paymentMethod);
+        return ResponseEntity.ok(total);
+    }
+
+
 
 
     // Total desde-hasta por categoria
