@@ -13,11 +13,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/logs")
+@CrossOrigin
 public class LogController {
 
     @Autowired
     private LogService logService;
-
 
     //CRUD
 
@@ -109,21 +109,15 @@ public class LogController {
         return ResponseEntity.ok(total);
     }
 
-
-
-
-    // Total desde-hasta por categoria
-
-
-    // Total desde-hasta por medio de pago
-
-
-
-
-    //todo: logica del negocio: calculos de totales por rubro por mes; calculo totales desde-hasta. En el servicio(?)
-
-    //todo: mostrar en un front (Tymeleaf?)
+   
 
     //todo: Spring Security: loggearse para poder editar
+
+    //todo: mostrar en un front (Thymeleaf?)
+
+
+
+    //todo: tests de los metodos de la logica del negocio (y del CRUD?)
+
 
 }
