@@ -9,11 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/logs")
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:3000")
 public class LogController {
 
     @Autowired
@@ -37,20 +40,20 @@ public class LogController {
     }
 
     @PostMapping("/addlog")
-    public String addLog(@RequestBody Log log){
+    public ResponseEntity<String> addLog(@RequestBody Log log){
         logService.addlog(log);
-        return "Registro agregado correctamente";
+        return ResponseEntity.status(HttpStatus.CREATED).body("Registro agregado correctamente");
     }
 
     //TODO: ver de agregar confirmación antes de borrar.
 
     @DeleteMapping("/{id}")
-    public String deleteLog(@PathVariable Long id){
+    public ResponseEntity<String> deleteLog(@PathVariable Long id) {
         try {
             logService.deleteLog(id);
-            return "Registro borrado correctamente";
+            return ResponseEntity.ok("Registro borrado correctamente");
         } catch (LogNotFoundException e) {
-            return "ID no encontrado";
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ID no encontrado");
         }
     }
 
@@ -79,15 +82,30 @@ public class LogController {
 
     // Total por categoria por mes
         //Recibo por url el N° del mes y la categoria del enum y hago validacion del mes
+
+    /*
+   METODO ANTERIOR, REEMPLAZADO POR EL QUE UTILIZA UN SOLO PARAMETRO
     @GetMapping("/totalMesCategoria/{month}/{category}")
     public ResponseEntity<?> getLogsPerMonthPerCategory(@PathVariable int month, @PathVariable Category category) {
         if (month < 1 || month > 12) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Mes inválido. Debe estar entre 1 y 12.");
         }
-
         double total = logService.getLogsPerMonthPerCategory(month, category);
         return ResponseEntity.ok(total);
+    }*/
+
+    // Total por categoria
+    // Recibo solo la categoria
+    @GetMapping("/totalsByMonthAndCategory/{category}")
+    public ResponseEntity<?> getTotalsByMonthAndCategory(@PathVariable Category category) {
+        Map<Integer, Double> totalsByMonth = new HashMap<>();
+        for (int month = 1; month <= 12; month++) {
+            double total = logService.getLogsPerMonthPerCategory(month, category);
+            totalsByMonth.put(month, total);
+        }
+        return ResponseEntity.ok(totalsByMonth);
     }
+
 
     // Total por medio de pago
         //Recibo por url el medio de pago del enum
