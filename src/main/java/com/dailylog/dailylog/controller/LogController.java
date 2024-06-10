@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -95,7 +94,7 @@ public class LogController {
     }*/
 
     // Total por categoria
-    // Recibo solo la categoria
+    // Recibo solo la categoria (utiliazdo en gráfico interactivo)
     @GetMapping("/totalsByMonthAndCategory/{category}")
     public ResponseEntity<?> getTotalsByMonthAndCategory(@PathVariable Category category) {
         Map<Integer, Double> totalsByMonth = new HashMap<>();
@@ -105,6 +104,22 @@ public class LogController {
         }
         return ResponseEntity.ok(totalsByMonth);
     }
+    //totales por mes y por categoría.
+    //Utilizado en el gráfico stacked bar principal
+    @GetMapping("/totalsByMonth")
+    public ResponseEntity<?> getTotalsByMonth() {
+        Map<Integer, Map<Category, Double>> totalsByMonth = new HashMap<>();
+        for (int month = 1; month <= 12; month++) {
+            Map<Category, Double> totalsByCategory = new HashMap<>();
+            for (Category category : Category.values()) {
+                double total = logService.getLogsPerMonthPerCategory(month, category);
+                totalsByCategory.put(category, total);
+            }
+            totalsByMonth.put(month, totalsByCategory);
+        }
+        return ResponseEntity.ok(totalsByMonth);
+    }
+
 
 
     // Total por medio de pago
