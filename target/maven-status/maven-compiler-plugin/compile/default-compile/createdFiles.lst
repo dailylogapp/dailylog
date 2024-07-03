@@ -1,0 +1,9 @@
+com\dailylog\dailylog\configuration\CorsConfiguration.class
+com\dailylog\dailylog\service\LogService.class
+com\dailylog\dailylog\repository\LogRepository.class
+com\dailylog\dailylog\model\Category.class
+com\dailylog\dailylog\model\Log.class
+com\dailylog\dailylog\controller\LogController.class
+com\dailylog\dailylog\DailylogApplication.class
+com\dailylog\dailylog\exceptions\LogNotFoundException.class
+com\dailylog\dailylog\model\PaymentMethod.class

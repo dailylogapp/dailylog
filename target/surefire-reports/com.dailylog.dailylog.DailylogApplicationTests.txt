@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.dailylog.dailylog.DailylogApplicationTests
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 69.23 s -- in com.dailylog.dailylog.DailylogApplicationTests
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 38.16 s -- in com.dailylog.dailylog.DailylogApplicationTests
