@@ -6,6 +6,7 @@ import com.dailylog.dailylog.model.Log;
 import com.dailylog.dailylog.model.PaymentMethod;
 import com.dailylog.dailylog.service.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/logs")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000") // Funciona igual en producción!
 public class LogController {
 
     @Autowired
@@ -26,6 +27,14 @@ public class LogController {
     @GetMapping("")
     public List<Log> getAllLogs(){
         return logService.getAllLogs();
+    }
+
+    //Registros paginados (los 10 ultimos se muestran primero)
+    @GetMapping("/paged")
+    public Page<Log> getLogsPaged(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return logService.getLogsPaged(page, size);
     }
 
     @GetMapping("/{id}")

@@ -6,6 +6,10 @@ import com.dailylog.dailylog.model.Log;
 import com.dailylog.dailylog.model.PaymentMethod;
 import com.dailylog.dailylog.repository.LogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -19,6 +23,12 @@ public class LogService {
 
     public List<Log> getAllLogs(){
         return logRepository.findAll();
+    }
+
+    //Resultados paginados (10 registros por pagina)
+    public Page<Log> getLogsPaged(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("date").descending());
+        return logRepository.findAll(pageable);
     }
 
     public void addlog(Log log) {
